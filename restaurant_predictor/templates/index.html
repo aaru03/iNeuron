@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Rating Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Restaurant Rating Predictor</h1>
+        <form id="ratingForm">
+            <label for="name">Restaurant Name:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="cuisine">Cuisine Type:</label>
+            <input type="text" id="cuisine" name="cuisine" required><br>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required><br>
+            <label for="price">Price Range:</label>
+            <input type="text" id="price" name="price" required><br>
+            <button type="submit">Predict Rating</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.getElementById('ratingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                document.getElementById('result').innerHTML = `<p>${data.prediction}</p>`;
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
